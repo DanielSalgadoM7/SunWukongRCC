@@ -40,14 +40,25 @@ public class RoomNodeSO : ScriptableObject
 
         //começa essa região pra ver as mudanças
         EditorGUI.BeginChangeCheck();
-        
-        //vai aparecer um popup com os possíveis nós
-        int selected = roomNodeTypeList.lista.FindIndex(x => x == roomNodeType);
 
-        //é a variável que vai armazenar o nó que foi selecionado
-        int selection = EditorGUILayout.Popup("", selected, GetRoomNodeTypesToDisplay());
+        // Se o no tem pai ou é do tipo entrada define um label else exibe um popup
+        if (idListaNodePai.Count > 0 || roomNodeType.isEntrada)
+        {
+            // da um label ao no que não pode ser alterado
+            EditorGUILayout.LabelField(roomNodeType.roomNodeTypeName);
+        }
 
-        roomNodeType = roomNodeTypeList.lista[selection];
+        else
+        {
+
+            //vai aparecer um popup com os possíveis nós
+            int selected = roomNodeTypeList.lista.FindIndex(x => x == roomNodeType);
+
+            //é a variável que vai armazenar o nó que foi selecionado
+            int selection = EditorGUILayout.Popup("", selected, GetRoomNodeTypesToDisplay());
+
+            roomNodeType = roomNodeTypeList.lista[selection];
+        }
 
         //tudo que tive entre isso e o begin change vai ser salvo no popup
         if (EditorGUI.EndChangeCheck()){

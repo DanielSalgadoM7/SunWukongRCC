@@ -7,6 +7,7 @@ using UnityEditor;
 public class RoomNodeGraphEditor : EditorWindow
 {
     private GUIStyle roomNodeStyle;
+    private GUIStyle roomNodeSelectedStyle;
     private static RoomNodeGraphSO currentRoomNodeGraph;
     private RoomNodeSO currentRoomNode = null;
     private RoomNodeTypeListSO roomNodeTypeList;
@@ -30,6 +31,9 @@ public class RoomNodeGraphEditor : EditorWindow
     //permite que a gente consiga desenhar os grafos na nova janela do projeto
     private void OnEnable()
     {
+        // Adiciona ao inspector o envento de mudança de tela para o editor do RoomNodeGraph
+        Selection.selectionChanged += InspectorSelectionChanged;
+
         //isso aqui é css dos botões que organizam o grafo das salas
         roomNodeStyle = new GUIStyle();
         roomNodeStyle.normal.background = EditorGUIUtility.Load("node1") as Texture2D;
@@ -37,8 +41,22 @@ public class RoomNodeGraphEditor : EditorWindow
         roomNodeStyle.padding = new RectOffset(nodePadding, nodePadding, nodePadding, nodePadding);
         roomNodeStyle.border = new RectOffset(nodeBorder, nodeBorder, nodeBorder, nodeBorder);
 
+        // "css" dos botões que foram selecionados
+        roomNodeSelectedStyle = new GUIStyle();
+        roomNodeSelectedStyle.normal.background = EditorGUIUtility.Load("node1 on") as Texture2D;
+        roomNodeSelectedStyle.normal.textColor= Color.white;
+        roomNodeSelectedStyle.padding = new RectOffset(nodePadding, nodePadding, nodePadding, nodePadding);
+        roomNodeSelectedStyle.border = new RectOffset(nodeBorder, nodeBorder, nodeBorder, nodeBorder);
+
+
+
         //Preenche o grafo com os tipos de sala
         roomNodeTypeList = GameResources.Instance.roomNodeTypeList;
+    }
+
+    private void OnDisable()
+    {
+        Selection.selectionChanged -= InspectorSelectionChanged;
     }
 
     //abre a janela do projeto se clicar no inspetor do objeto
@@ -139,8 +157,16 @@ public class RoomNodeGraphEditor : EditorWindow
 
     //processa os eventos de clique no mouse dentro do grafo das salas
     private void ProcessMouseDownEvent(Event currentEvent) {
+        
+        //Processa o click com botão direito 
         if (currentEvent.button == 1) {
             ShowContextMenu(currentEvent.mousePosition);
+        }
+        //Processa o click com botão esquerdo
+        else if (currentEvent.button == 0){
+
+            ClearLineDrag();
+            ClearAllSelectedRoomNodes();
         }
     }
 
@@ -156,6 +182,13 @@ public class RoomNodeGraphEditor : EditorWindow
     //cria uma sala na posição menu, tentar centralizar a entrada
     //igual em aeds2, um método vai chamar o outro de mesmo nome, mas com parametros adicionais
     private void CreateRoomNode(object mousePositionObject) {
+
+        // Se o grafo está vazio cria a sala de entrada
+        if (currentRoomNodeGraph.roomNodeList.Count == 0) {
+
+            CreateRoomNode(new Vector2(200f, 200f), roomNodeTypeList.lista.Find(x => x.isEntrada));
+        }
+        
         CreateRoomNode(mousePositionObject, roomNodeTypeList.lista.Find(x => x.isNone));
     }
 
@@ -180,6 +213,20 @@ public class RoomNodeGraphEditor : EditorWindow
         currentRoomNodeGraph.OnValidate();
     }
 
+    // Remove a seleção de todos  os nos
+    private void ClearAllSelectedRoomNodes()
+    {
+        foreach (RoomNodeSO roomNode in currentRoomNodeGraph.roomNodeList)
+        {
+            if (roomNode.isSelected)
+            {
+                roomNode.isSelected = false;
+
+                GUI.changed = true;
+            }
+        }
+
+    }
     private void ProcessMouseUpEvent(Event currentEvent) {
         //se a gente arrasta a linha, mas não chega em nenhum outro nó, ela vai ser excluída
         if (currentEvent.button == 1 && currentRoomNodeGraph.roomNodeToDrawLineFrom != null){
@@ -269,10 +316,32 @@ public class RoomNodeGraphEditor : EditorWindow
     private void DrawRoomNodes(){
         //loop até que todos os nós tenham sido desenhados
         foreach(RoomNodeSO roomNode in currentRoomNodeGraph.roomNodeList){
-            //chama o css do nó pra criar ele
-            roomNode.Draw(roomNodeStyle);
+
+            if (roomNode.isSelected)
+            {
+                // cria o no que está selecionado
+                roomNode.Draw(roomNodeSelectedStyle);
+            }
+            else
+            {
+                //chama o css do nó pra criar ele
+                roomNode.Draw(roomNodeStyle);
+            }
         }
         GUI.changed = true;
+    }
+
+    // Muda a tela do editor de grafo quando seleciona outro RoomNodeGraph
+    private void InspectorSelectionChanged()
+    {
+        RoomNodeGraphSO roomNodeGraph = Selection.activeObject as RoomNodeGraphSO;
+
+        if (roomNodeGraph != null)
+        {
+            currentRoomNodeGraph = roomNodeGraph;
+            GUI.changed = true;
+        }
+
     }
 
 }
