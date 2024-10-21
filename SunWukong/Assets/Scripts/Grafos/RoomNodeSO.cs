@@ -6,9 +6,9 @@ using UnityEditor;
 
 public class RoomNodeSO : ScriptableObject
 {
-    [HideInInspector] public string id;
-    [HideInInspector] public List<string> idListaNodePai = new List<string>();
-    [HideInInspector] public List<string> idListaNodeFilho = new List<string>();
+    public string id;
+    public List<string> idListaNodePai = new List<string>();
+    public List<string> idListaNodeFilho = new List<string>();
     [HideInInspector] public RoomNodeGraphSO roomNodeGraph;
     public RoomNodeTypeSO roomNodeType;
     [HideInInspector] public RoomNodeTypeListSO roomNodeTypeList;
@@ -46,10 +46,7 @@ public class RoomNodeSO : ScriptableObject
         {
             // da um label ao no que não pode ser alterado
             EditorGUILayout.LabelField(roomNodeType.roomNodeTypeName);
-        }
-
-        else
-        {
+        }else{
 
             //vai aparecer um popup com os possíveis nós
             int selected = roomNodeTypeList.lista.FindIndex(x => x == roomNodeType);
@@ -58,6 +55,28 @@ public class RoomNodeSO : ScriptableObject
             int selection = EditorGUILayout.Popup("", selected, GetRoomNodeTypesToDisplay());
 
             roomNodeType = roomNodeTypeList.lista[selection];
+
+            // If the room type selection has changed making child connections potentially invalid
+            if (roomNodeTypeList.lista[selected].isCorredor && !roomNodeTypeList.lista[selection].isCorredor ||
+                !roomNodeTypeList.lista[selected].isCorredor ||
+                roomNodeTypeList.lista[selected].isSalaBoss && !roomNodeTypeList.lista[selection].isSalaBoss){
+                if (idListaNodeFilho.Count > 0){
+                    for (int i = idListaNodeFilho.Count - 1; i >= 0; i--){
+                        // Get child room node
+                        RoomNodeSO nodeFilho = roomNodeGraph.GetRoomNode(idListaNodeFilho[i]);
+
+                        // If the child room node is not null
+                        if (nodeFilho != null){
+                            // Remove childID from parent room node
+                            RemoveIdFilhoFromRoomNode(nodeFilho.id);
+
+                            // Remove parentID from child room node
+                            nodeFilho.RemoveIdPaiFromRoomNode(id);
+                        }
+                    }
+                }
+            }
+
         }
 
         //tudo que tive entre isso e o begin change vai ser salvo no popup
@@ -166,8 +185,79 @@ public class RoomNodeSO : ScriptableObject
 
     //vai adicionar os Id's filho para os nós
     public bool AddIdFilhoToRoomNode(string idFilho){
-        idListaNodeFilho.Add(idFilho);
+
+        //vai verificar se a sala já possui a quantidade de filhos máxima
+        if (IsChildRoomValid(idFilho)){
+            idListaNodeFilho.Add(idFilho);
+            return true;
+        }
+        return false;
+    }
+
+    //vai verificar tudo que a gente pensou pra criação dos cenários
+    public bool IsChildRoomValid(string idFilho) {
+        bool isConnectedBossNode = false; // verifica se a sala já tem um caminho para a sala do boss, pra que não crie duas ramificações
+        foreach (RoomNodeSO roomNode in roomNodeGraph.roomNodeList) {
+            if (roomNode.roomNodeType.isSalaBoss && roomNode.idListaNodePai.Count > 0) {
+                isConnectedBossNode = true;
+            }
+        }
+
+        //se já tem uma sala de boss conectada
+        if (roomNodeGraph.GetRoomNode(idFilho).roomNodeType.isSalaBoss && isConnectedBossNode) {
+            return false;
+        }
+
+        //se ele tem uma sala do tipo none
+        if (roomNodeGraph.GetRoomNode(idFilho).roomNodeType.isNone) {
+            return false;
+        }
+
+        //se já tem uma sala com esse id Filho ( não cria dois caminhos de um corredor só pra mesma sala
+        if (idListaNodeFilho.Contains(idFilho)) {
+            return false;
+        }
+
+        //não pode fazer um caminho pra própria sala né
+        if (id == idFilho) {
+            return false;
+        }
+
+        //se o novo nó já tá ligado no nó pai, não precisa de outro caminho
+        if (idListaNodePai.Contains(idFilho)) {
+            return false;
+        }
+
+        //se o nó já tem um nó pai ele retorna falso
+        if (roomNodeGraph.GetRoomNode(idFilho).idListaNodePai.Count > 0) {
+            return false;
+        }
+
+        //um corredor não pode ligar com outro corredor
+        if (roomNodeGraph.GetRoomNode(idFilho).roomNodeType.isCorredor && roomNodeType.isCorredor) {
+            return false;
+        }
+
+        //se a ultima sala não é um corredor, e o nó atual não é um corredor, não tem como ligar os dois
+        if (!roomNodeGraph.GetRoomNode(idFilho).roomNodeType.isCorredor && !roomNodeType.isCorredor){
+            return false;
+        }
+
+        // verifica se já tá com o max de filhos
+        if (roomNodeGraph.GetRoomNode(idFilho).roomNodeType.isCorredor && idListaNodeFilho.Count >= Settings.maxCorredorFilho){
+            return false;
+        }
+
+        // se o filho do nó é uma entrada, tá errado, pq a entrada é o que começa, não tem pai
+        if (roomNodeGraph.GetRoomNode(idFilho).roomNodeType.isEntrada){
+            return false;
+        }
+        // a gente vai criar um corredor que só conecta duas salas
+        if (!roomNodeGraph.GetRoomNode(idFilho).roomNodeType.isCorredor && idListaNodeFilho.Count > 0){
+                return false;
+        }
         return true;
+
     }
 
     //vai adicionar os Id's pai para os nós
@@ -175,6 +265,30 @@ public class RoomNodeSO : ScriptableObject
         idListaNodePai.Add(idPai);
         return true;
     }
+
+    //remove nó filho
+    public bool RemoveIdFilhoFromRoomNode(string idFilho) {
+        // se o nó contem o id filho, remove ele
+        if (idListaNodeFilho.Contains(idFilho))
+        {
+            idListaNodeFilho.Remove(idFilho);
+            return true;
+        }
+        return false;
+    }
+
+    //remove nó pai
+    public bool RemoveIdPaiFromRoomNode(string idPai)
+    {
+        // se o nó contem o id pai, remove ele
+        if (idListaNodePai.Contains(idPai))
+        {
+            idListaNodePai.Remove(idPai);
+            return true;
+        }
+        return false;
+    }
+
 #endif
     #endregion Editor Code
 }

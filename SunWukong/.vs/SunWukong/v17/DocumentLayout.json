@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\User\\SunWukongRCC\\SunWukong\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{99F825D5-7569-2826-F30B-DE3DA2C3BA75}|Assembly-CSharp.csproj|c:\\users\\user\\sunwukongrcc\\sunwukong\\assets\\scripts\\grafos\\roomnodeso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99F825D5-7569-2826-F30B-DE3DA2C3BA75}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\grafos\\roomnodeso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{862C7E57-9E19-2800-E642-D6534E39A037}|Assembly-CSharp-Editor.csproj|C:\\Users\\User\\SunWukongRCC\\SunWukong\\assets\\scripts\\grafos\\editor\\roomnodegrapheditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{862C7E57-9E19-2800-E642-D6534E39A037}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\scripts\\grafos\\editor\\roomnodegrapheditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{862C7E57-9E19-2800-E642-D6534E39A037}|Assembly-CSharp-Editor.csproj|c:\\users\\user\\sunwukongrcc\\sunwukong\\assets\\scripts\\grafos\\editor\\roomnodegrapheditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{862C7E57-9E19-2800-E642-D6534E39A037}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\scripts\\grafos\\editor\\roomnodegrapheditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{99F825D5-7569-2826-F30B-DE3DA2C3BA75}|Assembly-CSharp.csproj|c:\\users\\user\\sunwukongrcc\\sunwukong\\assets\\scripts\\grafos\\roomnodeso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99F825D5-7569-2826-F30B-DE3DA2C3BA75}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\grafos\\roomnodeso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,30 +18,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "RoomNodeGraphEditor.cs",
               "DocumentMoniker": "C:\\Users\\User\\SunWukongRCC\\SunWukong\\Assets\\Scripts\\Grafos\\Editor\\RoomNodeGraphEditor.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Grafos\\Editor\\RoomNodeGraphEditor.cs",
               "ToolTip": "C:\\Users\\User\\SunWukongRCC\\SunWukong\\Assets\\Scripts\\Grafos\\Editor\\RoomNodeGraphEditor.cs",
               "RelativeToolTip": "Assets\\Scripts\\Grafos\\Editor\\RoomNodeGraphEditor.cs",
-              "ViewState": "AQIAABcAAAAAAAAAAAAUwCEAAABXAAAA",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAYwCkBAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-19T00:09:20.093Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "RoomNodeSO.cs",
               "DocumentMoniker": "C:\\Users\\User\\SunWukongRCC\\SunWukong\\Assets\\Scripts\\Grafos\\RoomNodeSO.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Grafos\\RoomNodeSO.cs",
               "ToolTip": "C:\\Users\\User\\SunWukongRCC\\SunWukong\\Assets\\Scripts\\Grafos\\RoomNodeSO.cs",
               "RelativeToolTip": "Assets\\Scripts\\Grafos\\RoomNodeSO.cs",
-              "ViewState": "AQIAACcAAAAAAAAAAAAowCsAAAA2AAAA",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowCsAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-19T00:20:52.399Z",
               "EditorCaption": ""

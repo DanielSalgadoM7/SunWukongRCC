@@ -10,19 +10,26 @@ public class RoomNodeGraphSO : ScriptableObject
     [HideInInspector] public List<RoomNodeSO> roomNodeList = new List<RoomNodeSO>();
     [HideInInspector] public Dictionary<string, RoomNodeSO> roomNodeDictionary = new Dictionary<string, RoomNodeSO>();
 
-    private void Awake(){
+    private void Awake() {
         LoadRoomNodeDictionary();
     }
 
-    private void LoadRoomNodeDictionary(){
+    private void LoadRoomNodeDictionary() {
         roomNodeDictionary.Clear();
 
         //preenche a estrutura Dictionary, que armazena os nós dos objetos
-        foreach(RoomNodeSO node in roomNodeList){
+        foreach (RoomNodeSO node in roomNodeList) {
             roomNodeDictionary[node.id] = node;
         }
     }
 
+    //seleciona o nó pelo ID
+    public RoomNodeSO GetRoomNode(string roomNodeID) {
+        if (roomNodeDictionary.TryGetValue((roomNodeID), out RoomNodeSO roomNode)){
+            return roomNode;
+        }
+        return null;
+    }
     #region Editor Code
 #if UNITY_EDITOR
 

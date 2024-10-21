@@ -3,6 +3,7 @@
 using UnityEngine;
 using UnityEditor.Callbacks;
 using UnityEditor;
+using System.Collections.Generic;
 
 public class RoomNodeGraphEditor : EditorWindow
 {
@@ -11,6 +12,8 @@ public class RoomNodeGraphEditor : EditorWindow
     private static RoomNodeGraphSO currentRoomNodeGraph;
     private RoomNodeSO currentRoomNode = null;
     private RoomNodeTypeListSO roomNodeTypeList;
+    private Vector2 graphOffset;
+    private Vector2 graphDrag;
 
     //valor de cada nó
     private const float nodeWidth = 160f;
@@ -21,6 +24,10 @@ public class RoomNodeGraphEditor : EditorWindow
     //valor de cada linha que conecta os nós
     private const float connectingLineWidth = 3f;
     private const float connectingLineArrowSize = 6f;
+
+    //valores pro grid estilizado
+    private const float gridLarge = 100f;
+    private const float gridSmall = 25f;
 
     [MenuItem("Editor de Grafos", menuItem = "Window/Grafos/EditorGrafosSalas")]
     private static void OpenWindow()
@@ -82,6 +89,11 @@ public class RoomNodeGraphEditor : EditorWindow
 
         //verifica se um objeto do tipo RoomNodeGraphSO foi selecionado
         if (currentRoomNodeGraph != null) {
+
+            //desenha o layout estilizado no editor
+            DrawBackgroundGrid(gridSmall, 0.2f, Color.gray);
+            DrawBackgroundGrid(gridLarge, 0.3f, Color.gray);
+
             //desenha a linha que tá sendo puxada do nó
             DrawDraggedLine();
 
@@ -100,6 +112,32 @@ public class RoomNodeGraphEditor : EditorWindow
         }
     }
 
+    //função que desenha linhas e colunas pra ficar mais simétrico no editor
+    private void DrawBackgroundGrid(float gridSize, float gridOpacity, Color gridColor){
+        //calcula a quantidade de linhas e colunas que tem que ter baseado no tamanho da tela
+        int verticalLineCount = Mathf.CeilToInt((position.width + gridSize) / gridSize);
+        int horizontalLineCount = Mathf.CeilToInt((position.height + gridSize) / gridSize);
+
+        Handles.color = new Color(gridColor.r, gridColor.g, gridColor.b, gridOpacity);
+
+        graphOffset += graphDrag * 0.5f;
+
+        Vector3 gridOffset = new Vector3(graphOffset.x % gridSize, graphOffset.y % gridSize, 0);
+
+        //desenha as linhas verticais
+        for (int i = 0; i < verticalLineCount; i++){
+            Handles.DrawLine(new Vector3(gridSize * i, -gridSize, 0) + gridOffset, new Vector3(gridSize * i, position.height + gridSize, 0f) + gridOffset);
+        }
+
+        //desenha as linhas horizontais
+        for (int j = 0; j < horizontalLineCount; j++){
+            Handles.DrawLine(new Vector3(-gridSize, gridSize * j, 0) + gridOffset, new Vector3(position.width + gridSize, gridSize * j, 0f) + gridOffset);
+        }
+
+        Handles.color = Color.white;
+
+    }
+
     private void DrawDraggedLine() {
         //vai desenhar a linha partindo do nó, até o mouse direito parar de ser clicado
         if (currentRoomNodeGraph.linePosition != Vector2.zero) {
@@ -109,6 +147,8 @@ public class RoomNodeGraphEditor : EditorWindow
     }
 
     private void ProcessEvents(Event currentEvent) {
+
+        graphDrag = Vector2.zero;
 
         //seleciona o nó que ou tá vazio ou não tá sendo arrastado
         if (currentRoomNode == null || currentRoomNode.isLeftClickDragging == false) {
@@ -176,6 +216,15 @@ public class RoomNodeGraphEditor : EditorWindow
 
         menu.AddItem(new GUIContent("Cria novo nó pra sala"), false, CreateRoomNode, mousePosition);
 
+        menu.AddSeparator("");
+
+        menu.AddItem(new GUIContent("Seleciona todos os nós do grafo"), false, SelectAllRoomNodes);
+
+        menu.AddSeparator("");
+
+        menu.AddItem(new GUIContent("Deleta o caminho entre os nós selecionados"), false, DeleteSelectedRoomNodeLinks);
+        menu.AddItem(new GUIContent("Deleta todos os nós selecionados"), false, DeleteSelectedRoomNodes);
+
         menu.ShowAsContext();
     }
 
@@ -213,6 +262,82 @@ public class RoomNodeGraphEditor : EditorWindow
         currentRoomNodeGraph.OnValidate();
     }
 
+    //limpa o caminho entre os nós
+    private void DeleteSelectedRoomNodeLinks(){
+        //percorre todos os nós do grafo
+        foreach (RoomNodeSO roomNode in currentRoomNodeGraph.roomNodeList){
+            if (roomNode.isSelected && roomNode.idListaNodeFilho.Count > 0){
+                for (int i = roomNode.idListaNodeFilho.Count - 1; i >= 0; i--){
+                    //variavel do nó filho
+                    RoomNodeSO nodeFilho = currentRoomNodeGraph.GetRoomNode(roomNode.idListaNodeFilho[i]);
+
+                    //verifica se o nó filho foi selecionado
+                    if (nodeFilho != null && nodeFilho.isSelected){
+                        //remove o id do filho da ligação com o pai
+                        roomNode.RemoveIdFilhoFromRoomNode(nodeFilho.id);
+
+                        //remove o id do pai na ligação com o filho
+                        nodeFilho.RemoveIdPaiFromRoomNode(roomNode.id);
+                    }
+                }
+            }
+        }
+
+        // limpa os nós selecionados
+        ClearAllSelectedRoomNodes();
+    }
+
+    private void DeleteSelectedRoomNodes()
+    {
+        Queue<RoomNodeSO> roomNodeDeletionQueue = new Queue<RoomNodeSO>();
+
+        //percorre todos os nós do grafo
+        foreach (RoomNodeSO roomNode in currentRoomNodeGraph.roomNodeList){
+            if (roomNode.isSelected && !roomNode.roomNodeType.isEntrada){
+                roomNodeDeletionQueue.Enqueue(roomNode);
+
+                //percorre sobre o id de cada nó filho
+                foreach (string idNodeFilho in roomNode.idListaNodeFilho){
+                 
+                    RoomNodeSO nodeFilho = currentRoomNodeGraph.GetRoomNode(idNodeFilho);
+
+                    if (nodeFilho != null){
+                        //remove o id do pai do nó filho
+                        nodeFilho.RemoveIdPaiFromRoomNode(roomNode.id);
+                    }
+                }
+                foreach (string idNodePai in roomNode.idListaNodeFilho){
+                    //volta pros nó pai
+                    RoomNodeSO nodePai = currentRoomNodeGraph.GetRoomNode(idNodePai);
+
+                    if (nodePai != null)
+                    {
+                        // Remove childID from parent node
+                        nodePai.RemoveIdFilhoFromRoomNode(roomNode.id);
+                    }
+                }
+            }
+        }
+        
+        //vai deletar a lista dos nós escolhidos
+        while (roomNodeDeletionQueue.Count > 0){
+            //variavel pra armazenar os nós selecionados
+            RoomNodeSO roomNodeToDelete = roomNodeDeletionQueue.Dequeue();
+
+            //remove o nó da estrutura
+            currentRoomNodeGraph.roomNodeDictionary.Remove(roomNodeToDelete.id);
+
+            //remove o nó da lista do grafo
+            currentRoomNodeGraph.roomNodeList.Remove(roomNodeToDelete);
+
+            //remove o nó do salvamento na base de dados
+            DestroyImmediate(roomNodeToDelete, true);
+
+            //salva a nova base de dados
+            AssetDatabase.SaveAssets();
+        }
+    }
+
     // Remove a seleção de todos  os nos
     private void ClearAllSelectedRoomNodes()
     {
@@ -226,6 +351,13 @@ public class RoomNodeGraphEditor : EditorWindow
             }
         }
 
+    }
+
+    private void SelectAllRoomNodes(){
+        foreach(RoomNodeSO roomNode in currentRoomNodeGraph.roomNodeList){
+            roomNode.isSelected = true;
+        }
+        GUI.changed = true;
     }
     private void ProcessMouseUpEvent(Event currentEvent) {
         //se a gente arrasta a linha, mas não chega em nenhum outro nó, ela vai ser excluída
@@ -242,9 +374,11 @@ public class RoomNodeGraphEditor : EditorWindow
         }
     }
     private void ProcessMouseDragEvent(Event currentEvent){
-        //se clicar com o botão direito, vai chamar a função pra traçar a linha
+        //se segurar com o botão direito, vai chamar a função pra traçar a linha
         if(currentEvent.button == 1){
             ProcessRightMouseDragEvent(currentEvent);
+        }else if (currentEvent.button == 0){//se segurar com o esquerdo, vai mexer o grid
+            ProcessLeftMouseDragEvent(currentEvent.delta);
         }
     }
 
@@ -254,6 +388,17 @@ public class RoomNodeGraphEditor : EditorWindow
             DragConnectingLine(currentEvent.delta);
             GUI.changed = true;
         }
+    }
+
+    //função que mexe o mapa quando segura o botão esquerdo
+    private void ProcessLeftMouseDragEvent(Vector2 dragDelta){
+        graphDrag = dragDelta;
+
+        for (int i = 0; i < currentRoomNodeGraph.roomNodeList.Count; i++){
+            currentRoomNodeGraph.roomNodeList[i].DragNode(dragDelta);
+        }
+
+        GUI.changed = true;
     }
 
     public void DragConnectingLine(Vector2 delta){
