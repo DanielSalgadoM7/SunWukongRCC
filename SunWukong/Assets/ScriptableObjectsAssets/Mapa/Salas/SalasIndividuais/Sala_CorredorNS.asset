@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2708e4084c4a1534ba646096300f778c, type: 3}
+  m_Name: Sala_CorredorNS
+  m_EditorClassIdentifier: 
+  guid: 30e81d176d884e743ab18333bac1dd5d
+  prefab: {fileID: 3340649490144707135, guid: 53dcc70aaa5399e4aa2e338fb5972edf, type: 3}
+  previousPrefab: {fileID: 3340649490144707135, guid: 53dcc70aaa5399e4aa2e338fb5972edf, type: 3}
+  roomNodeType: {fileID: 11400000, guid: 0d3e574b89fa15f4f8145f9160cd6d40, type: 2}
+  lowerBounds: {x: -4, y: 0}
+  upperBounds: {x: 10, y: 17}
+  doorwayList:
+  - position: {x: 7, y: 17}
+    orientation: 0
+    doorPrefab: {fileID: 0}
+    doorwayStartCopyPosition: {x: 0, y: 0}
+    doorwayCopiaLarguraTile: 0
+    doorwayCopiaAlturaTile: 0
+    isConnected: 0
+    isUnavailable: 0
+  - position: {x: 0, y: 0}
+    orientation: 2
+    doorPrefab: {fileID: 0}
+    doorwayStartCopyPosition: {x: 0, y: 0}
+    doorwayCopiaLarguraTile: 0
+    doorwayCopiaAlturaTile: 0
+    isConnected: 0
+    isUnavailable: 0
+  spawnPositionArray:
+  - {x: 3, y: 8}
