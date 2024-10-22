@@ -72,3 +72,6 @@ TagManager:
   - name: Minimap
     uniqueID: 1491282665
     locked: 0
+  - name: Transition
+    uniqueID: 3546202949
+    locked: 0

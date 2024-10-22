@@ -13,46 +13,13 @@ public class MenuPrincipalManager : MonoBehaviour
     [SerializeField] private GameObject painelAudio;
     [SerializeField] private GameObject painelControles;
     [SerializeField] private GameObject painelCreditos;
-    [SerializeField] private Animator transition;
-    [SerializeField] private float transitionTime = 1f;
+    public LevelLoader levelLoader;
 
     // Método para iniciar o jogo (carregar o mapa)
     public void Jogar()
     {
         // Inicia a transição e carrega o mapa após o tempo de transição
-        StartCoroutine(LoadLevelByName(nomeMapa));
-    }
-
-    // Carrega a próxima cena pelo índice
-    private IEnumerator LoadLevel(int levelIndex)
-    {
-        // Aciona a animação de transição
-        transition.SetTrigger("Start");
-
-        // Espera pela duração da transição antes de carregar a cena
-        yield return new WaitForSeconds(transitionTime);
-
-        // Carrega a cena pelo índice
-        SceneManager.LoadScene(levelIndex);
-    }
-
-    // Carrega uma cena pelo nome (usado para Jogar)
-    private IEnumerator LoadLevelByName(string sceneName)
-    {
-        // Aciona a animação de transição
-        transition.SetTrigger("Start");
-
-        // Espera pela duração da transição antes de carregar a cena
-        yield return new WaitForSeconds(transitionTime);
-
-        // Carrega a cena pelo nome
-        SceneManager.LoadScene(sceneName);
-    }
-
-    // Método para carregar o menu
-    public void Menu()
-    {
-        StartCoroutine(LoadLevelByName(nomeMenu));
+        levelLoader.Transition(nomeMapa);
     }
 
     // usa a função de toggle painel pq é melhor que o método manual de escrever true e false, gasta menos linha
