@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e41afd099bd6dac49a8e3f95d1e1071c, type: 3}
+  m_Name: NivelDoMapa_1
+  m_EditorClassIdentifier: 
+  nomeNivel: Roberto da Rua 2
+  roomTemplateList:
+  - {fileID: 11400000, guid: 0d4d780b2f6431d4b899c9d8f6dd75f1, type: 2}
+  - {fileID: 11400000, guid: 7c3bdeb7d8a46d64cb0f4f3562f54d6f, type: 2}
+  - {fileID: 11400000, guid: 86c5d5d72eb32584b8b40951887fbeba, type: 2}
+  - {fileID: 11400000, guid: 7e3cd1e26d496424f9a3f660e731b7e8, type: 2}
+  - {fileID: 11400000, guid: f5ea10cce7d6755498ac34e9e78ac49e, type: 2}
+  - {fileID: 11400000, guid: 9c593f0fdf002224292620822f276b16, type: 2}
+  - {fileID: 11400000, guid: d414a77a10151e540ab95a045563eb29, type: 2}
+  - {fileID: 11400000, guid: 9ca3d893248b5d84cbcf3fa02c8d6846, type: 2}
+  roomNodeGraphList:
+  - {fileID: 11400000, guid: 5d244a4d220f2ab40b849984abaeedee, type: 2}

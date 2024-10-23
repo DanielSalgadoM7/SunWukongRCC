@@ -18,6 +18,12 @@ public static class HelperUtilities
         bool error = false;
         int count = 0;
 
+        if(enumerableObjectToCheck == null)
+        {
+            Debug.Log(fieldName + " é vazio no objeto " + thisObject.name.ToString());
+            return true;
+        }
+
         foreach(var item in enumerableObjectToCheck){
             if(item == null){
                 Debug.Log(fieldName + " objeto tem valor nulo " + thisObject.name.ToString());

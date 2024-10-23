@@ -61,17 +61,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Utilidades\HelperUtilities.cs" />
+    <Compile Include="Assets\Scripts\GameManager\GameManager.cs" />
     <Compile Include="Assets\Scripts\Grafos\RoomNodeSO.cs" />
     <Compile Include="Assets\Scripts\Grafos\RoomNodeTypeSO.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuPrincipalManager.cs" />
     <Compile Include="Assets\Scripts\Grafos\RoomNodeGraphSO.cs" />
     <Compile Include="Assets\AssetsProntas\Cainos\Pixel Art Top Down - Basic\Script\PropsAltar.cs" />
     <Compile Include="Assets\AssetsProntas\Cainos\Pixel Art Top Down - Basic\Script\SpriteColorAnimation.cs" />
+    <Compile Include="Assets\Scripts\Misc\SingletonScript.cs" />
     <Compile Include="Assets\AssetsProntas\Cainos\Pixel Art Top Down - Basic\Script\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Enums\Enums.cs" />
+    <Compile Include="Assets\Scripts\Mapa\NivelMapaSO.cs" />
     <Compile Include="Assets\Scripts\Grafos\RoomNodeTypeListSO.cs" />
+    <Compile Include="Assets\Scripts\Mapa\SalaInstanciada.cs" />
     <Compile Include="Assets\Scripts\Mapa\RoomTemplateSO.cs" />
     <Compile Include="Assets\Scripts\GameManager\GameResources.cs" />
+    <Compile Include="Assets\Scripts\Mapa\Sala.cs" />
     <Compile Include="Assets\Scripts\Misc\Settings.cs" />
     <Compile Include="Assets\AssetsProntas\Cainos\Pixel Art Top Down - Basic\Script\TopDownCharacterController.cs" />
     <Compile Include="Assets\AssetsProntas\Cainos\Pixel Art Top Down - Basic\Script\LayerTrigger.cs" />
