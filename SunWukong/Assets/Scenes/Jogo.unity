@@ -371,10 +371,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listaNivelMapa:
   - {fileID: 11400000, guid: f24c0e072c09cb5418fe80174519bf2f, type: 2}
-  - {fileID: 11400000, guid: f24c0e072c09cb5418fe80174519bf2f, type: 2}
-  - {fileID: 11400000, guid: f24c0e072c09cb5418fe80174519bf2f, type: 2}
-  - {fileID: 11400000, guid: f24c0e072c09cb5418fe80174519bf2f, type: 2}
-  - {fileID: 11400000, guid: f24c0e072c09cb5418fe80174519bf2f, type: 2}
   indexNivelMapaAtual: 0
   gameState: 0
 --- !u!4 &1225575419
