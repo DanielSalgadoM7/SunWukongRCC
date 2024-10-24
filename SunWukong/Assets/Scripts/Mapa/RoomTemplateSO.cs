@@ -49,7 +49,7 @@ public class RoomTemplateSO : ScriptableObject
 
 #if UNITY_EDITOR
 
-    // Validate SO fields
+    
     private void OnValidate()
     {
         if (guid == "" || previousPrefab != prefab)

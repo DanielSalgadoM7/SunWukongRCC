@@ -10,12 +10,15 @@ public class Sala
     public RoomNodeTypeSO roomNodeType;
     public Vector2Int lowerBounds;
     public Vector2Int upperBounds;
+    public Vector2Int templateLowerBounds;
+    public Vector2Int templateUpperBounds;
     public Vector2Int[] spawnPositionArray;
     public List<string> listaIdSalaFilho;
     public string idSalaPai;
     public List<Doorway> doorWayList;
+    public bool isPosicionado = false;
     public SalaInstanciada salaInstanciada;
-    public bool isAcesso = false;
+    public bool isAceso = false;
     public bool isSemInimigos = false;
     public bool isJaVisitado = false;
 
@@ -25,3 +28,5 @@ public class Sala
         doorWayList = new List<Doorway>();
     }
 }
+
+

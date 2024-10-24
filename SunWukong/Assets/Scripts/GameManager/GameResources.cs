@@ -21,6 +21,11 @@ public class GameResources : MonoBehaviour
 
     [Header ("Dungeon")]
 
+    #region Tooltip
     [Tooltip("Vai preencher com a RoomNodeTypeListSO ")]
     public RoomNodeTypeListSO roomNodeTypeList;
+    #endregion Tooltip
+
+    public Material dimmedMaterial;
+
 }

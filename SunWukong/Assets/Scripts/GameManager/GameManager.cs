@@ -46,7 +46,14 @@ public class GameManager : SingletonScript<GameManager>
         }
     }
 
-    private void PlayNivelMapa(int listaIndexNivelMapa) { }
+    private void PlayNivelMapa(int listaIndexNivelMapa) {
+        bool mapBuiltSucessfully = MapBuilder.Instance.GenerateDungeon(listaNivelMapa[listaIndexNivelMapa]);
+
+        if (!mapBuiltSucessfully)
+        {
+            Debug.LogError("Não foi possível criar a dungeon com esses nós e grafo.");
+        }
+    }
 
     #region Validation
 #if UNITY_EDITOR
